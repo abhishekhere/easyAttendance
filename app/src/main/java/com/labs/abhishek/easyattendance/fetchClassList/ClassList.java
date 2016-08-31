@@ -8,13 +8,14 @@ import android.widget.ListView;
 import com.labs.abhishek.easyattendance.R;
 import com.labs.abhishek.easyattendance.dbConnection.ClassTableDBHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by anand on 30/8/16.
  */
 public class ClassList extends Activity {
-        List<String> classList;
+    List<String> classList = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,8 +24,7 @@ public class ClassList extends Activity {
 
         ClassTableDBHelper classTableDBHelper = new ClassTableDBHelper(this);
         classList = new FetchClassList().fetchAllTheClasses(classTableDBHelper);
-
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, (String[]) classList.toArray());
+        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, (String[]) classList.toArray(new String[classList.size()]));
         ListView listView = (ListView) findViewById(R.id.lvClassList);
         listView.setAdapter(adapter);
     }

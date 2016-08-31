@@ -26,7 +26,6 @@ public class CreateAClass extends AppCompatActivity {
         bcreateAClass = (Button) findViewById(R.id.bAddClass);
         etClassName = (EditText) findViewById(R.id.etClassToBeAdded);
 
-        className = etClassName.getText().toString();
         bcreateAClass.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
@@ -40,6 +39,7 @@ public class CreateAClass extends AppCompatActivity {
         ClassTableDBHelper classTableDBHelper = new ClassTableDBHelper(this);
         Boolean result = false;
         try {
+            className = etClassName.getText().toString();
             result = classTableDBHelper.insertClass(className);
         }
         catch (Exception e){

@@ -7,7 +7,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by anand on 30/8/16.
@@ -39,11 +38,11 @@ public class ClassTableDBHelper extends SQLiteOpenHelper {
     }
 
 
-    public boolean insertClass  (String className)
+    public boolean insertClass(String className)
     {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("name", className);
+        contentValues.put(CLASSES_COLUMN_CLASS_NAME, className);
         db.insert(CLASSES_TABLE_NAME, null, contentValues);
         return true;
     }
@@ -61,11 +60,17 @@ public class ClassTableDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from "+CLASSES_TABLE_NAME, null );
         res.moveToFirst();
-
+        String value;
         while(res.isAfterLast() == false){
-            class_list.add(res.getString(res.getColumnIndex(CLASSES_COLUMN_CLASS_NAME)));
+            value = res.getString(res.getColumnIndex(CLASSES_COLUMN_CLASS_NAME)).toString();
+            class_list.add(value);
             res.moveToNext();
         }
         return class_list;
+    }
+
+    public void truncateTable() {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("DELETE FROM " + CLASSES_TABLE_NAME);
     }
 }
