@@ -8,29 +8,65 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.labs.abhishek.easyattendance.MainActivity">
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Let's create a class"
-        android:gravity="center"
-        android:layout_gravity="center"/>
-    <EditText
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:id="@+id/etClassToBeAdded"
-        android:hint="Enter the class name here"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvCeilingMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="Let's create a class" />
+
+        <EditText
+            android:id="@+id/etClassToBeAdded"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:hint="Enter the class name here" />
+
+        <Button
+            android:id="@+id/bAddClass"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Add" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="center"/>
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/bAddClass"
-        android:text="Add"
-        android:layout_marginTop="20dp"/>
-</LinearLayout>
+        android:orientation="vertical">
+
+        <Spinner
+            android:id="@+id/spinnerClassMenu"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:visibility="invisible"
+            android:prompt="Select a Class" />
+
+        <Button
+            android:id="@+id/bAddMembers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Add Members"
+            android:visibility="invisible" />
+
+        <Button
+            android:id="@+id/bBackToDashboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Back To Dashboard"
+            android:visibility="invisible" />
+    </LinearLayout>
 </RelativeLayout>
