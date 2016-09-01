@@ -50,8 +50,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:visibility="invisible"
-            android:prompt="Select a Class" />
+            android:visibility="invisible" />
 
         <Button
             android:id="@+id/bAddMembers"

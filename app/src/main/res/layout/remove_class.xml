@@ -12,34 +12,22 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="20dp">
 
-        <Button
-            android:id="@+id/bBrowseClasses"
-            android:layout_width="match_parent"
+        <Spinner
+            android:id="@+id/spinnerClassMenu"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Browse Classes"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:visibility="visible" />
 
         <Button
-            android:id="@+id/bStats"
+            android:id="@+id/bRemoveClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Stats" />
-
-        <Button
-            android:id="@+id/bGoToCreateClass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Create a class" />
-
-        <Button
-            android:id="@+id/bRemoveAClass"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Remove a class" />
+            android:text="Remove this class"
+            android:visibility="visible" />
     </LinearLayout>
 </RelativeLayout>

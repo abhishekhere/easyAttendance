@@ -11,6 +11,8 @@
         <activity android:name="com.labs.abhishek.easyattendance.NavigationPage"></activity>
         <activity android:name="com.labs.abhishek.easyattendance.createClasses.CreateAClass"></activity>
         <activity android:name="com.labs.abhishek.easyattendance.fetchClassList.ClassList"></activity>
+        <activity android:name="com.labs.abhishek.easyattendance.removeClass.RemoveClass"></activity>
+        <activity android:name="com.labs.abhishek.easyattendance.addMembers.AddMembers"></activity>
 
         <activity android:name=".MainActivity">
             <intent-filter>

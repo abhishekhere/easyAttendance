@@ -47,6 +47,11 @@ public class ClassTableDBHelper extends SQLiteOpenHelper {
         return true;
     }
 
+    public void removeClass(String className) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        db.execSQL("DELETE FROM " + CLASSES_TABLE_NAME + " where " + CLASSES_COLUMN_CLASS_NAME + "='" + className + "'");
+    }
+
     public Cursor getData(int id){
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor res =  db.rawQuery( "select * from "+CLASSES_TABLE_NAME+" where id="+id+"", null );
