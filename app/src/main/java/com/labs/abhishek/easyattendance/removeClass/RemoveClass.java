@@ -31,7 +31,7 @@ public class RemoveClass extends AppCompatActivity implements AdapterView.OnItem
         spinnerClassMenu = (Spinner) findViewById(R.id.spinnerClassMenu);
         bRemoveClass = (Button) findViewById(R.id.bRemoveClass);
         classTableDBHelper = new ClassTableDBHelper(this);
-        loadSpinnerList(classTableDBHelper);
+        loadSpinnerList();
         spinnerClassMenu.setOnItemSelectedListener(this);
         bRemoveClass.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -43,9 +43,11 @@ public class RemoveClass extends AppCompatActivity implements AdapterView.OnItem
 
     public void removeSelectedClass(ClassTableDBHelper classTableDBHelper) {
         classTableDBHelper.removeClass(classToRemove);
+        Toast.makeText(RemoveClass.this, "Successfully removed: " + classToRemove, Toast.LENGTH_LONG).show();
+        loadSpinnerList();
     }
 
-    public void loadSpinnerList(ClassTableDBHelper classTableDBHelper) {
+    public void loadSpinnerList() {
         List<String> classes = new ArrayList<String>();
         classes = (List<String>) classTableDBHelper.getAllClasses();
         // Creating adapter for spinner
@@ -59,10 +61,7 @@ public class RemoveClass extends AppCompatActivity implements AdapterView.OnItem
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-        // On selecting a spinner item
         classToRemove = parent.getItemAtPosition(position).toString();
-        // Showing selected spinner item
-        Toast.makeText(parent.getContext(), "Selected: " + classToRemove, Toast.LENGTH_LONG).show();
     }
 
     public void onNothingSelected(AdapterView<?> arg0) {

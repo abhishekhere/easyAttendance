@@ -13,6 +13,7 @@
         <activity android:name="com.labs.abhishek.easyattendance.fetchClassList.ClassList"></activity>
         <activity android:name="com.labs.abhishek.easyattendance.removeClass.RemoveClass"></activity>
         <activity android:name="com.labs.abhishek.easyattendance.addMembers.AddMembers"></activity>
+        <activity android:name="com.labs.abhishek.easyattendance.fetchMembersList.MembersList"></activity>
 
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,24 +23,26 @@ import java.util.List;
 /**
  * Created by anand on 30/8/16.
  */
-public class CreateAClass extends AppCompatActivity {
+public class CreateAClass extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
-    Button bcreateAClass, bAddMembers, bBackToDashboard;
+    Button bcreateAClass, bGoToAddMembersInstead, bAddMembers, bBackToDashboard;
     EditText etClassName;
     TextView tvCeilingMessage;
     Spinner spinnerClassMenu;
     String className;
-
+    ClassTableDBHelper classTableDBHelper;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_class);
         tvCeilingMessage = (TextView) findViewById(R.id.tvCeilingMessage);
         bcreateAClass = (Button) findViewById(R.id.bAddClass);
+        bGoToAddMembersInstead = (Button) findViewById(R.id.bGoToAddMembersInstead);
         bAddMembers = (Button) findViewById(R.id.bAddMembers);
         bBackToDashboard = (Button) findViewById(R.id.bBackToDashboard);
         etClassName = (EditText) findViewById(R.id.etClassToBeAdded);
         spinnerClassMenu = (Spinner) findViewById(R.id.spinnerClassMenu);
+        classTableDBHelper = new ClassTableDBHelper(this);
 
         bcreateAClass.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -55,16 +58,24 @@ public class CreateAClass extends AppCompatActivity {
             }
         });
 
+        bGoToAddMembersInstead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                postSuccessfulAdditionOfClass();
+            }
+        });
+
         bAddMembers.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 goToAddMembers();
             }
         });
+
+        spinnerClassMenu.setOnItemSelectedListener(this);
     }
 
     private void insertClassIntoDB() {
-        ClassTableDBHelper classTableDBHelper = new ClassTableDBHelper(this);
         Boolean result = false;
         try {
             className = etClassName.getText().toString();
@@ -75,7 +86,7 @@ public class CreateAClass extends AppCompatActivity {
         }
         if(result){
             Log.i("## Success"," in inserting class");
-            postSuccessfulAdditionOfClass(classTableDBHelper);
+            postSuccessfulAdditionOfClass();
         } else {
             bcreateAClass.setText("Something went wrong : Try Again");
         }
@@ -94,6 +105,7 @@ public class CreateAClass extends AppCompatActivity {
 
     private void goToAddMembers() {
         final Intent intentAddMembers = new Intent(this, AddMembers.class);
+        intentAddMembers.putExtra("currentClassName", className);
         Thread threadGoToAddMembers = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -103,7 +115,7 @@ public class CreateAClass extends AppCompatActivity {
         threadGoToAddMembers.start();
     }
 
-    private void postSuccessfulAdditionOfClass(ClassTableDBHelper classTableDBHelper) {
+    private void postSuccessfulAdditionOfClass() {
         List<String> classes = new ArrayList<String>();
         classes = (List<String>) classTableDBHelper.getAllClasses();
         // Creating adapter for spinner
@@ -112,15 +124,28 @@ public class CreateAClass extends AppCompatActivity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spinnerClassMenu.setAdapter(dataAdapter);
-        int defaultClassPosition = dataAdapter.getPosition(className);
-        spinnerClassMenu.setSelection(defaultClassPosition);
-
-        tvCeilingMessage.setText("Add members to " + className);
+        if (className != null && !className.equals("")) {
+            int defaultClassPosition = dataAdapter.getPosition(className);
+            spinnerClassMenu.setSelection(defaultClassPosition);
+            tvCeilingMessage.setText("Add members to " + className);
+        } else {
+            tvCeilingMessage.setText("Add members here");
+        }
         //spinnerClassMenu.set
         spinnerClassMenu.setVisibility(View.VISIBLE);
         bAddMembers.setVisibility(View.VISIBLE);
         bBackToDashboard.setVisibility(View.VISIBLE);
         etClassName.setVisibility(View.INVISIBLE);
         bcreateAClass.setVisibility(View.INVISIBLE);
+        bGoToAddMembersInstead.setVisibility(View.INVISIBLE);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        className = parent.getItemAtPosition(position).toString();
+    }
+
+    public void onNothingSelected(AdapterView<?> arg0) {
+        // TODO Auto-generated method stub
     }
 }

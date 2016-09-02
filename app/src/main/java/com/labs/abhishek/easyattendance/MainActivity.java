@@ -1,8 +1,8 @@
 package com.labs.abhishek.easyattendance;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends AppCompatActivity {
     Intent navigationPage;
@@ -18,9 +18,11 @@ public class MainActivity extends AppCompatActivity {
         Thread thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                navigationPage.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(navigationPage);
             }
         });
         thread.start();
+        finish();
     }
 }
