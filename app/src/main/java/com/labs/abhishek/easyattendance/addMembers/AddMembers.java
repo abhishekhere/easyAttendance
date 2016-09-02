@@ -1,10 +1,13 @@
 package com.labs.abhishek.easyattendance.addMembers;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.labs.abhishek.easyattendance.R;
 
@@ -19,6 +22,7 @@ public class AddMembers extends AppCompatActivity {
     EditText etRoll, etFirstName, etMiddleName, etLastName;
     Button bAddMore, bDone;
     Map<Integer, String[]> membersList;
+    boolean addDuplicate = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,8 +62,46 @@ public class AddMembers extends AppCompatActivity {
         }
         if (!(membersList.containsValue(name))) {
             membersList.put(rollNumber, name);
+            clearET();
         } else {
-            //TODO Alert Dialog
+            boolean response = showAlertDialog();
+            if (response) {
+                membersList.put(rollNumber, name);
+                //TODO not checking
+            }
+            clearET();
         }
+    }
+
+    private void clearET() {
+        etRoll.setText("");
+        etFirstName.setText("");
+        etMiddleName.setText("");
+        etLastName.setText("");
+    }
+
+    private boolean showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("You have already added this name");
+
+        alertDialogBuilder.setPositiveButton("I Know", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                Toast.makeText(AddMembers.this, "Added", Toast.LENGTH_LONG).show();
+                addDuplicate = true;
+            }
+        });
+
+        alertDialogBuilder.setNegativeButton("Oops", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(AddMembers.this, "Didn't Add", Toast.LENGTH_LONG).show();
+                addDuplicate = false;
+            }
+        });
+
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+        return addDuplicate;
     }
 }
