@@ -3,38 +3,88 @@ package com.labs.abhishek.easyattendance.fetchMembersList;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.labs.abhishek.easyattendance.R;
+import com.labs.abhishek.easyattendance.dbConnection.ClassAttendanceTableDBHelper;
 import com.labs.abhishek.easyattendance.dbConnection.ClassMembersTableDBHelper;
-import com.labs.abhishek.easyattendance.fetchClassList.ClassList;
+import com.labs.abhishek.easyattendance.dbConnection.TheStaticValuesClass;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by anand on 3/9/16.
  */
 public class MembersList extends Activity {
     List<String> membersList = new ArrayList<String>();
-    Intent intent;
+    Map<Integer, Integer> attendanceRegister = new HashMap<Integer, Integer>();
+    ClassMembersTableDBHelper classMembersTableDBHelper;
+    ClassAttendanceTableDBHelper classAttendanceTableDBHelper;
+    ListView membersListView;
+    Button bSubmitAttendance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.members_list);
 
-        ClassMembersTableDBHelper classMembersTableDBHelper = new ClassMembersTableDBHelper(this);
+        membersListView = (ListView) findViewById(R.id.lvMembersList);
+        bSubmitAttendance = (Button) findViewById(R.id.bSubmitAttendance);
+
+        classAttendanceTableDBHelper = new ClassAttendanceTableDBHelper(this);
+        classMembersTableDBHelper = new ClassMembersTableDBHelper(this);
         membersList = classMembersTableDBHelper.getAllMembers();
         if (membersList == null || membersList.isEmpty()) {
             showAlertDialog();
+        } else {
+            mapMembersListToAttendanceRegister();
         }
         ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, (String[]) membersList.toArray(new String[membersList.size()]));
         ListView listView = (ListView) findViewById(R.id.lvMembersList);
         listView.setAdapter(adapter);
+
+        membersListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String selectedMember = (String) membersListView.getItemAtPosition(position);
+                parent.getChildAt(position).setBackgroundColor(Color.parseColor("#ccccff"));
+                updateAttendanceRegister(selectedMember);
+            }
+        });
+
+        bSubmitAttendance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                classAttendanceTableDBHelper.takeAttendance(attendanceRegister);
+                Toast.makeText(MembersList.this, "** Success **", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void mapMembersListToAttendanceRegister() {
+        String roll;
+        for (String currentMember : membersList) {
+            String[] takeRoll = currentMember.split("\\:");
+            roll = takeRoll[0].trim();
+            attendanceRegister.put(Integer.valueOf(roll), 1);
+        }
+        new TheStaticValuesClass().membersColumn = attendanceRegister;
+    }
+
+    private void updateAttendanceRegister(String selectedMember) {
+        String[] takeRoll = selectedMember.split("\\:");
+        String roll = takeRoll[0].trim();
+        attendanceRegister.put(Integer.valueOf(roll), 0);
     }
 
     private void showAlertDialog() {
@@ -44,23 +94,11 @@ public class MembersList extends Activity {
         alertDialogBuilder.setPositiveButton("Go Back", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {
-                goToClassListPage();
+                finish();
             }
         });
         AlertDialog alertDialog = alertDialogBuilder.create();
         alertDialog.show();
     }
 
-    private void goToClassListPage() {
-        intent = new Intent(this, ClassList.class);
-        Thread goToClassListThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
-            }
-        });
-        goToClassListThread.start();
-        finish();
-    }
 }

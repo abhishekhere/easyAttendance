@@ -126,7 +126,9 @@ public class AddMembers extends AppCompatActivity {
         if (membersListToTransport != null && extras != null) {
             currentClassName = extras.getString("currentClassName");
             new TheStaticValuesClass(currentClassName);
+
             boolean result = new ClassMembersTableDBHelper(this).insertMembers(membersListToTransport);
+            //new ClassAttendanceTableDBHelper(this).getWritableDatabase();
             if (result) {
                 Toast.makeText(AddMembers.this, "Successfully Recorded", Toast.LENGTH_LONG).show();
             }

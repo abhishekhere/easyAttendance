@@ -2,6 +2,7 @@ package com.labs.abhishek.easyattendance.fetchClassList;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,13 +39,16 @@ public class ClassList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String className = (String) listView.getItemAtPosition(position);
+                parent.getChildAt(position).setBackgroundColor(Color.parseColor("#ccccff"));
                 moveToMembersListPage(className);
             }
         });
     }
 
     private void moveToMembersListPage(String className) {
+        new TheStaticValuesClass(className);
         final Intent membersIntent = new Intent(this, MembersList.class);
+        membersIntent.putExtra("CLASS_NAME", className);
         if (className != null && className != "") {
             new TheStaticValuesClass(className);
         }

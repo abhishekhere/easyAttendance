@@ -17,7 +17,6 @@ public class ClassMembersTableDBHelper extends SQLiteOpenHelper {
     TheStaticValuesClass theStaticValuesClass;
     public static String DATABASE_NAME = "";
     public static String TABLE_NAME = "";
-    //public static Map<Integer,String[]> membersList;
     private static final String PRIMERY_COLUMN = "Roll";
     private static final String FIRST_NAME_COLUMN = "FirstName";
     private static final String MIDDLE_NAME_COLUMN = "MiddleName";
