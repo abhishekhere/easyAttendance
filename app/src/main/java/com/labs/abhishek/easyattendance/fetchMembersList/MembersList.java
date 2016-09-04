@@ -65,8 +65,12 @@ public class MembersList extends Activity {
         bSubmitAttendance.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                classAttendanceTableDBHelper.takeAttendance(attendanceRegister);
-                Toast.makeText(MembersList.this, "** Success **", Toast.LENGTH_LONG).show();
+                boolean attendanceFlag = classAttendanceTableDBHelper.takeAttendance(attendanceRegister);
+                if (attendanceFlag) {
+                    Toast.makeText(MembersList.this, "** Success **", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(MembersList.this, "Attendance done for today", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
