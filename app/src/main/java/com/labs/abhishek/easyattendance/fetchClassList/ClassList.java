@@ -1,6 +1,8 @@
 package com.labs.abhishek.easyattendance.fetchClassList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -10,6 +12,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.labs.abhishek.easyattendance.R;
+import com.labs.abhishek.easyattendance.dateHelper.GetTodaysDate;
+import com.labs.abhishek.easyattendance.dbConnection.ClassAttendanceTableDBHelper;
 import com.labs.abhishek.easyattendance.dbConnection.ClassTableDBHelper;
 import com.labs.abhishek.easyattendance.dbConnection.TheStaticValuesClass;
 import com.labs.abhishek.easyattendance.fetchMembersList.MembersList;
@@ -23,6 +27,7 @@ import java.util.List;
 public class ClassList extends Activity {
     List<String> classList = new ArrayList<String>();
     ListView listView;
+    String className;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,14 +43,14 @@ public class ClassList extends Activity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String className = (String) listView.getItemAtPosition(position);
+                className = (String) listView.getItemAtPosition(position);
                 parent.getChildAt(position).setBackgroundColor(Color.parseColor("#ccccff"));
-                moveToMembersListPage(className);
+                postClickActivity();
             }
         });
     }
 
-    private void moveToMembersListPage(String className) {
+    private void moveToMembersListPage() {
         new TheStaticValuesClass(className);
         final Intent membersIntent = new Intent(this, MembersList.class);
         membersIntent.putExtra("CLASS_NAME", className);
@@ -59,5 +64,41 @@ public class ClassList extends Activity {
             }
         });
         threadGoToMembersList.start();
+    }
+
+    private void postClickActivity() {
+        new TheStaticValuesClass(className);
+        ClassAttendanceTableDBHelper classAttendanceTableDBHelper = new ClassAttendanceTableDBHelper(this);
+        String date = new GetTodaysDate().getTodayDate();
+        boolean isRecordPresent = classAttendanceTableDBHelper.isRecordPresentForDate(date);
+        try {
+            if (isRecordPresent) {
+                showAlertDialog();
+            } else {
+                moveToMembersListPage();
+            }
+        } catch (NullPointerException e) {
+            moveToMembersListPage();
+        }
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Attendance recorded for the day");
+
+        alertDialogBuilder.setPositiveButton("Browse Members", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                moveToMembersListPage();
+            }
+        });
+        alertDialogBuilder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                closeOptionsMenu();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

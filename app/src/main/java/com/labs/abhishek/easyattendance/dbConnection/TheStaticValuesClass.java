@@ -1,5 +1,6 @@
 package com.labs.abhishek.easyattendance.dbConnection;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -12,6 +13,7 @@ public class TheStaticValuesClass {
     public static String MEMBERS_DB_NAME;
     public static String MEMBERS_TABLE_NAME;
     public static Map<Integer, Integer> membersColumn;
+    public static ArrayList<String> membersList;
 
     public static String ATTENDANCE_DB_NAME;
     public static String ATTENDANCE_TABLE_NAME;

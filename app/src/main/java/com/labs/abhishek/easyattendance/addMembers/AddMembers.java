@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.labs.abhishek.easyattendance.R;
+import com.labs.abhishek.easyattendance.dbConnection.ClassAttendanceTableDBHelper;
 import com.labs.abhishek.easyattendance.dbConnection.ClassMembersTableDBHelper;
 import com.labs.abhishek.easyattendance.dbConnection.TheStaticValuesClass;
 
@@ -25,7 +26,9 @@ public class AddMembers extends AppCompatActivity {
     Button bAddMore, bDone;
     Map<Integer, String> membersList;
     Map<Integer, String[]> membersListToTransport;
+    Map<Integer, Integer> membersListForAttendace;//Added so that attendance table gets created here itself
     boolean addDuplicate = false;
+    private int previousRoll = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class AddMembers extends AppCompatActivity {
 
         membersList = new HashMap<Integer, String>();
         membersListToTransport = new HashMap<Integer, String[]>();
+        membersListForAttendace = new HashMap<Integer, Integer>();
         etRoll = (EditText) findViewById(R.id.etRollNumber);
         etFirstName = (EditText) findViewById(R.id.etFirstName);
         etMiddleName = (EditText) findViewById(R.id.etMiddleName);
@@ -60,22 +64,24 @@ public class AddMembers extends AppCompatActivity {
         String[] name = new String[3];
         String full_name = "//";
         if (etRoll != null && etRoll.getText() != null) {
-            rollNumber = Integer.valueOf(etRoll.getText().toString());
+            rollNumber = Integer.valueOf(etRoll.getText().toString().trim());
+            previousRoll = rollNumber;
         }
         if (etFirstName != null && etFirstName.getText() != null) {
-            name[0] = etFirstName.getText().toString();
+            name[0] = etFirstName.getText().toString().trim();
         }
         if (etMiddleName != null && etMiddleName.getText() != null) {
-            name[1] = etMiddleName.getText().toString();
+            name[1] = etMiddleName.getText().toString().trim();
         }
         if (etLastName != null && etLastName.getText() != null) {
-            name[2] = etLastName.getText().toString();
+            name[2] = etLastName.getText().toString().trim();
         }
         full_name = name[0] + "/" + name[1] + "/" + name[2];
 
         if (!(membersList.containsValue(full_name))) {
             membersList.put(rollNumber, full_name);
             membersListToTransport.put(rollNumber, name);
+            membersListForAttendace.put(rollNumber, 1);
             Toast.makeText(AddMembers.this, "Added", Toast.LENGTH_LONG).show();
             clearET();
         } else {
@@ -83,6 +89,7 @@ public class AddMembers extends AppCompatActivity {
             if (response) {
                 membersList.put(rollNumber, full_name);
                 membersListToTransport.put(rollNumber, name);
+                membersListForAttendace.put(rollNumber, 1);
                 Toast.makeText(AddMembers.this, "Added", Toast.LENGTH_LONG).show();
             }
             clearET();
@@ -94,6 +101,8 @@ public class AddMembers extends AppCompatActivity {
         etFirstName.setText("");
         etMiddleName.setText("");
         etLastName.setText("");
+        previousRoll++;
+        etRoll.setText(String.valueOf(previousRoll));
     }
 
     private boolean showAlertDialog() {
@@ -125,10 +134,10 @@ public class AddMembers extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (membersListToTransport != null && extras != null) {
             currentClassName = extras.getString("currentClassName");
-            new TheStaticValuesClass(currentClassName);
+            new TheStaticValuesClass(currentClassName).membersColumn = membersListForAttendace;
 
             boolean result = new ClassMembersTableDBHelper(this).insertMembers(membersListToTransport);
-            //new ClassAttendanceTableDBHelper(this).getWritableDatabase();
+            boolean attendanceTableCreationStatus = new ClassAttendanceTableDBHelper(this).emptyMethod();//Added for creation of attendance table here itself
             if (result) {
                 Toast.makeText(AddMembers.this, "Successfully Recorded", Toast.LENGTH_LONG).show();
             }

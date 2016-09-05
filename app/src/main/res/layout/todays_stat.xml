@@ -13,17 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-    <ListView
-        android:id="@+id/lvMembersList"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#ccffcc" />
 
-        <Button
+        <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:id="@+id/bSubmitAttendance"
-            android:text="Submit Attendance" />
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:id="@+id/lvStatsClassList"></ListView>
     </LinearLayout>
+
 </RelativeLayout>

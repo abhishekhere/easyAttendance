@@ -1,5 +1,7 @@
 package com.labs.abhishek.easyattendance;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +24,26 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(navigationPage);
             }
         });
-        thread.start();
+        try {
+            thread.start();
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlertDialog();
+        }
         finish();
+    }
+
+    private void showAlertDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("Opps! Something is wrong");
+
+        alertDialogBuilder.setPositiveButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface arg0, int arg1) {
+                finish();
+            }
+        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
     }
 }

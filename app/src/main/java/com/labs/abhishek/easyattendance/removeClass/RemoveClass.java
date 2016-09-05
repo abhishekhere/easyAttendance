@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.labs.abhishek.easyattendance.R;
 import com.labs.abhishek.easyattendance.dbConnection.ClassTableDBHelper;
+import com.labs.abhishek.easyattendance.dbConnection.TheStaticValuesClass;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,13 +37,17 @@ public class RemoveClass extends AppCompatActivity implements AdapterView.OnItem
         bRemoveClass.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                removeSelectedClass(classTableDBHelper);
+                removeSelectedClass();
             }
         });
     }
 
-    public void removeSelectedClass(ClassTableDBHelper classTableDBHelper) {
+    public void removeSelectedClass() {
+        String dbMembersName = new TheStaticValuesClass(classToRemove).MEMBERS_DB_NAME;
+        String dbAttendanceName = new TheStaticValuesClass(classToRemove).ATTENDANCE_DB_NAME;
         classTableDBHelper.removeClass(classToRemove);
+        this.deleteDatabase(dbMembersName);
+        this.deleteDatabase(dbAttendanceName);
         Toast.makeText(RemoveClass.this, "Successfully removed: " + classToRemove, Toast.LENGTH_LONG).show();
         loadSpinnerList();
     }
@@ -56,7 +61,7 @@ public class RemoveClass extends AppCompatActivity implements AdapterView.OnItem
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         // attaching data adapter to spinner
         spinnerClassMenu.setAdapter(dataAdapter);
-        spinnerClassMenu.setSelection(1);
+        spinnerClassMenu.setSelection(0);
     }
 
     @Override

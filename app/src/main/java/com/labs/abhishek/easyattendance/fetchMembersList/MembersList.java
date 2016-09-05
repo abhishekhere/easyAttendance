@@ -57,8 +57,7 @@ public class MembersList extends Activity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String selectedMember = (String) membersListView.getItemAtPosition(position);
-                parent.getChildAt(position).setBackgroundColor(Color.parseColor("#ccccff"));
-                updateAttendanceRegister(selectedMember);
+                updateAttendanceRegister(selectedMember, parent, position);
             }
         });
 
@@ -67,9 +66,9 @@ public class MembersList extends Activity {
             public void onClick(View view) {
                 boolean attendanceFlag = classAttendanceTableDBHelper.takeAttendance(attendanceRegister);
                 if (attendanceFlag) {
-                    Toast.makeText(MembersList.this, "** Success **", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MembersList.this, "Attendance taken", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(MembersList.this, "Attendance done for today", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MembersList.this, "Attendance record exists for today", Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -85,10 +84,18 @@ public class MembersList extends Activity {
         new TheStaticValuesClass().membersColumn = attendanceRegister;
     }
 
-    private void updateAttendanceRegister(String selectedMember) {
+    private void updateAttendanceRegister(String selectedMember, AdapterView<?> parent, int position) {
         String[] takeRoll = selectedMember.split("\\:");
         String roll = takeRoll[0].trim();
-        attendanceRegister.put(Integer.valueOf(roll), 0);
+        if (attendanceRegister.get(Integer.valueOf(roll)) == 1) {
+            attendanceRegister.put(Integer.valueOf(roll), 0);
+            parent.getChildAt(position).setBackgroundColor(Color.parseColor("#ffb3b3"));
+        } else if (attendanceRegister.get(Integer.valueOf(roll)) == 0) {
+            attendanceRegister.put(Integer.valueOf(roll), 1);
+            parent.getChildAt(position).setBackgroundColor(Color.parseColor("#ccffcc"));
+        } else {
+
+        }
     }
 
     private void showAlertDialog() {

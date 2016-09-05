@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.labs.abhishek.easyattendance.createClasses.CreateAClass;
 import com.labs.abhishek.easyattendance.fetchClassList.ClassList;
 import com.labs.abhishek.easyattendance.removeClass.RemoveClass;
+import com.labs.abhishek.easyattendance.statsHomePage.StatsHomePage;
 
 /**
  * Created by anand on 30/8/16.
@@ -16,7 +17,7 @@ import com.labs.abhishek.easyattendance.removeClass.RemoveClass;
 public class NavigationPage extends AppCompatActivity {
 
     Button browseClasses, stats, createClasses, bRemoveAClass;
-    Intent intentCreateClass, intentBrowseClasses, intentRemoveClass;
+    Intent intentCreateClass, intentBrowseClasses, intentRemoveClass, intentStatsHomePage;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +46,13 @@ public class NavigationPage extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 goToRemoveClass();
+            }
+        });
+
+        stats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                goToStatsHomePage();
             }
         });
     }
@@ -80,6 +88,18 @@ public class NavigationPage extends AppCompatActivity {
             @Override
             public void run() {
                 startActivity(intentRemoveClass);
+            }
+        });
+        thread.start();
+    }
+
+    private void goToStatsHomePage() {
+        intentStatsHomePage = new Intent(this, StatsHomePage.class);
+
+        Thread thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                startActivity(intentStatsHomePage);
             }
         });
         thread.start();
