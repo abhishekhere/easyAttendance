@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.labs.abhishek.easyattendance.R;
+import com.labs.abhishek.easyattendance.customization.CustomizeArrayAdapter;
 import com.labs.abhishek.easyattendance.dateHelper.GetTodaysDate;
 import com.labs.abhishek.easyattendance.dbConnection.ClassAttendanceTableDBHelper;
 import com.labs.abhishek.easyattendance.dbConnection.ClassTableDBHelper;
@@ -36,7 +37,8 @@ public class ClassList extends Activity {
 
         ClassTableDBHelper classTableDBHelper = new ClassTableDBHelper(this);
         classList = new FetchClassList().fetchAllTheClasses(classTableDBHelper);
-        ArrayAdapter adapter = new ArrayAdapter<String>(this, R.layout.activity_listview, (String[]) classList.toArray(new String[classList.size()]));
+        ArrayAdapter adapter = new CustomizeArrayAdapter(this, R.layout.activity_listview, (String[]) classList.toArray(new String[classList.size()]));
+        //new ArrayAdapter<String>(this, R.layout.activity_listview, (String[]) classList.toArray(new String[classList.size()]));
         listView = (ListView) findViewById(R.id.lvClassList);
         listView.setAdapter(adapter);
 

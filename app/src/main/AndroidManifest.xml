@@ -16,6 +16,7 @@
         <activity android:name="com.labs.abhishek.easyattendance.fetchMembersList.MembersList"></activity>
         <activity android:name="com.labs.abhishek.easyattendance.statsHomePage.StatsHomePage"></activity>
         <activity android:name="com.labs.abhishek.easyattendance.todaysStat.TodaysStat"></activity>
+        <activity android:name="com.labs.abhishek.easyattendance.todaysStat.TodaysStatMembers"></activity>
 
         <activity android:name=".MainActivity">
             <intent-filter>

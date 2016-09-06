@@ -109,14 +109,15 @@ public class ClassAttendanceTableDBHelper extends SQLiteOpenHelper {
         return returnValue;
     }
 
-    public String getPresentPercentStat(String date) {
+    public TodaysAttendanceStatDTO getPresentPercentStat(String date) {
+        TodaysAttendanceStatDTO todaysAttendanceStatDTO = new TodaysAttendanceStatDTO();
         String response = "/";
         theStaticValuesClass = new TheStaticValuesClass();
         TABLE_NAME = theStaticValuesClass.ATTENDANCE_TABLE_NAME;
         SQLiteDatabase db = this.getWritableDatabase();
         try {
             if (isRecordPresentForDate(date)) {
-                TodaysAttendanceStatDTO todaysAttendanceStatDTO = getPresentVsAbsent(date);
+                todaysAttendanceStatDTO = getPresentVsAbsent(date);
                 int[] presentVsAbsent = new int[2];
                 presentVsAbsent = todaysAttendanceStatDTO.getPresentVsAbsentArray();
                 response = String.valueOf(presentVsAbsent[0]) + "/" + String.valueOf(presentVsAbsent[0] + presentVsAbsent[1]);
@@ -127,7 +128,8 @@ public class ClassAttendanceTableDBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
             response = "Record not found";
         }
-        return response;
+        todaysAttendanceStatDTO.setResponse(response);
+        return todaysAttendanceStatDTO;
     }
 
     public TodaysAttendanceStatDTO getPresentVsAbsent(String date) {
@@ -135,7 +137,7 @@ public class ClassAttendanceTableDBHelper extends SQLiteOpenHelper {
         TodaysAttendanceStatDTO todaysAttendanceStatDTO = new TodaysAttendanceStatDTO();
         theStaticValuesClass = new TheStaticValuesClass();
         ArrayList<String> membersList = theStaticValuesClass.membersList;
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + DATE_COLUMN + "='" + date + "'";
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor res = db.rawQuery(query, null);
         res.moveToFirst();
@@ -146,6 +148,7 @@ public class ClassAttendanceTableDBHelper extends SQLiteOpenHelper {
                 String presentOrAbsent = res.getString(res.getColumnIndex("Roll" + roll)).toString();
                 if (presentOrAbsent != null) {
                     todaysAttendanceStatDTO.getRollVsAttendanceValueMap().put(Integer.valueOf(roll), Integer.valueOf(presentOrAbsent));
+                    todaysAttendanceStatDTO.getMembersNameVsAttendanceValueMap().put(member, presentOrAbsent);
                     if (presentOrAbsent.equalsIgnoreCase("0")) {
                         absent++;
                     } else if (presentOrAbsent.equalsIgnoreCase("1")) {
@@ -156,8 +159,8 @@ public class ClassAttendanceTableDBHelper extends SQLiteOpenHelper {
                 }
             }
         }
-        todaysAttendanceStatDTO.getPresentVsAbsentArray()[0] = present;
-        todaysAttendanceStatDTO.getPresentVsAbsentArray()[1] = absent;
+        todaysAttendanceStatDTO.getPresentVsAbsentArray()[0] = present; //Adding present count to array
+        todaysAttendanceStatDTO.getPresentVsAbsentArray()[1] = absent; //Adding absent count to array
         return todaysAttendanceStatDTO;
     }
 

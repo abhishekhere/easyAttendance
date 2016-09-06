@@ -9,10 +9,17 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.labs.abhishek.easyattendance.MainActivity">
 
-    <ListView
-        android:id="@+id/lvClassList"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#F8DE7E"></ListView>
+        android:orientation="vertical">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:id="@+id/lvStatsMembersList"></ListView>
+    </LinearLayout>
 
 </RelativeLayout>

@@ -20,7 +20,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:text="Let's create a class" />
+            android:text="Create a class"
+            android:layout_marginTop="20dp" />
 
         <EditText
             android:id="@+id/etClassToBeAdded"
@@ -29,14 +30,24 @@
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:hint="Enter the class name here" />
+            android:hint="Enter the class name here"
+            android:singleLine="true" />
 
         <Button
             android:id="@+id/bAddClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Add" />
+            android:text="Create" />
+
+        <TextView
+            android:id="@+id/tvOrMessage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="OR"
+            android:layout_marginTop="40dp" />
 
         <Button
             android:id="@+id/bGoToAddMembersInstead"
